@@ -5,7 +5,7 @@ function PinCode({currentState, setState}) {
 
     function handleChange (event) {
         setState(oldState => {
-            let array = [...currentState]
+            let array = [...oldState]
             if (event.target.value.length >= 1) {
 
                 array[event.target.id] = array[event.target.id] 

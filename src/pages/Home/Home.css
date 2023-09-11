@@ -1,6 +1,7 @@
 .home { 
     height: 100vh;
     width: 100%;
+    
     display: flex;
     flex-direction: column;
 }
@@ -31,4 +32,18 @@
     flex: 5;
     height: 50px;
     width: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.home-form-input {
+    margin-bottom: 50px;
+}
+
+.home-form {
+    display: flex;
+    flex-direction: column;
+    gap: 30px;
 }
