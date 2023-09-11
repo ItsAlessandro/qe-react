@@ -16,8 +16,13 @@ function PinCode({currentState, setState}) {
                     document.getElementById((parseInt(event.target.id) + 1).toString()).focus()
                 } else document.getElementById(event.target.id).blur()
                 
-            } else array[event.target.id] = ''
-            
+            } else {
+                array[event.target.id] = ''
+                if (event.target.id !== '0') {
+                    document.getElementById((parseInt(event.target.id) - 1).toString()).focus()
+                }
+                else document.getElementById(event.target.id).blur()
+            }
             return array
         })
     }
