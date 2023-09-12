@@ -1,21 +1,13 @@
 import React, { useState } from 'react'
 import PinCode from '../../components/PinCode'
 import './Home.css'
-import { useDisplayName } from '../../store'
 
 function Home() {
 
     const [pinCode, setPinCode] = useState(['', '', '', '', '', ''])
     const [userName, setUserName] = useState('')
 
-    /* const displayName = useDisplayName(state => state.displayName)
-    const changeName = useDisplayName(state => state.updateName)
-
-    console.log(displayName)
-    changeName('Ciao')
-    console.log(displayName) */
-
-    function InputhandleChange (event) {
+    function InputhandleChange (event) { // Input
         setUserName(event.target.value)
     }   
 
@@ -28,7 +20,7 @@ function Home() {
                     setState={setPinCode}
                 />
             </div>
-            <div className='home-options' id='test-id'>
+            <div className='home-options'>
                 <div className='home-form-input'>
                     <input 
                         className='generic-input'
