@@ -1,15 +1,14 @@
 import React, { useState } from 'react'
 import PinCode from '../../components/PinCode'
 import './Home.css'
+import { useDisplayName } from '../../store'
 
 function Home() {
 
     const [pinCode, setPinCode] = useState(['', '', '', '', '', ''])
-    const [userName, setUserName] = useState('')
 
-    function InputhandleChange (event) { // Input
-        setUserName(event.target.value)
-    }   
+    const displayName = useDisplayName(state => state.displayName)
+    const changeName = useDisplayName(state => state.updateName)
 
     return (
         <div className='home'>
@@ -20,15 +19,15 @@ function Home() {
                     setState={setPinCode}
                 />
             </div>
-            <div className='home-options'>
+            <div className='home-options' id='test-id'>
                 <div className='home-form-input'>
                     <input 
                         className='generic-input'
                         type='text'
-                        value={userName}
+                        value={displayName}
                         placeholder='UserName'
                         maxLength={20}
-                        onChange={(e) => InputhandleChange(e)}
+                        onChange={(e) => changeName(e)}
                     />
                 </div>
                 <div className='home-form'>
