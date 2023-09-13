@@ -1,4 +1,3 @@
-import React from 'react'
 import './PinCode.css'
 import { useSessionUrl } from '../../store'
 
