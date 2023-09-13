@@ -1,4 +1,4 @@
-import React from 'react'
+import { useTheme } from '@emotion/react'
 import PinCode from '../../components/PinCode'
 import { useDisplayName, useSessionUrl } from '../../store'
 import './Home.css'
@@ -9,6 +9,7 @@ import { doc, setDoc, serverTimestamp, addDoc, collection } from 'firebase/fires
 
 function Home() {
 
+    const theme = useTheme()
     const displayName = useDisplayName(state => state.displayName)
     const changeName = useDisplayName(state => state.updateName)
     const sessionURL = useSessionUrl(state => state.sessionUrl)
@@ -36,7 +37,7 @@ function Home() {
             <div className='home-options' id='test-id'>
                 <div className='home-form-input'>
                     <input 
-                        className='generic-input'
+                        style={theme.input}
                         type='text'
                         value={displayName}
                         placeholder='UserName'
@@ -45,8 +46,8 @@ function Home() {
                     />
                 </div>
                 <div className='home-form'>
-                    <button className='generic-button'> Partecipa </button>
-                    <button className='generic-button' onClick={handleCreateSession}> Crea </button>
+                    <button style={theme.button}> Partecipa </button>
+                    <button style={theme.button} onClick={handleCreateSession}> Crea </button>
                 </div>
             </div>
         </div>
