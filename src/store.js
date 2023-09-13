@@ -12,4 +12,4 @@ export const useSessionUrl = create((set) => ({
     updateUrl: (newUrl) => set(() => ({
         sessionUrl: newUrl
     }))
-})) 
+}))

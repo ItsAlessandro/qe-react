@@ -8,14 +8,14 @@ function Lobby() {
 
   return (
     <div className='lobby home'>
-        
             <div className='lobby-header home-header'></div>
 
             <div className='lobby-code home-code'>
                 <PinCode />
             </div>
 
-            <div className='lobby-requests'>
+            <div className='lobby-body'>
+              <div className='lobby-container'>
                 <Request colour="#4287f5"></Request>
                 <Request colour="#4287f5"></Request>
                 <Request colour="#4287f5"></Request>
@@ -23,19 +23,10 @@ function Lobby() {
                 <Request colour="#4287f5"></Request>
                 <Request colour="#4287f5"></Request>
                 <Request colour="#4287f5"></Request>
-                <Request colour="#4287f5"></Request>
-                <Request colour="#4287f5"></Request>
-                <Request colour="#4287f5"></Request>
-                <Request colour="#4287f5"></Request>
-                <Request colour="#4287f5"></Request>
-                <Request colour="#4287f5"></Request>
-                <Request colour="#4287f5"></Request>
-                <Request colour="#4287f5"></Request>
-                <Request colour="#4287f5"></Request>
-                <Request colour="#4287f5"></Request>
-                <Request colour="#4287f5"></Request>
-                <Request colour="#4287f5"></Request>
-                <Request colour="#4287f5"></Request>
+              </div>
+              <div className='lobby-startbutton-container'>
+                <button className='generic-button'>Avvia</button>
+              </div>
             </div>
     </div>
   )

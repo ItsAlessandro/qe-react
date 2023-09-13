@@ -1,25 +1,46 @@
 .request {
     height: 60px;
-    width: 80%;
+    width: 100%;
     display: flex;
-    justify-content: space-around;
-    align-items: center;
+    justify-content: center;
     gap: 10px;
+    margin-bottom: 17px;
 }
   
 .request-circle {
-  width: 50px;
-  height: 50px;
+  width: 46px;
+  height: 44px;
   border-radius: 50%;
+  box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
 }
 
 .request-label {
-    padding: 12px 60px;
+    width: 172px;
+    height: 44px;
+    padding-top: 8pt;
     border-radius: 20px;
     box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
+    text-align: center;
+}
+
+.request-accepted-label {
+  width: 222px;
+  height: 44px;
+  padding: 12px 50px;
+  border-radius: 20px;
+  box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
+  text-align: center;
 }
 
 .request-nickname {
   font-weight: 700;
   font-size: 20px;
+}
+
+.request-button {
+  border-radius: 50%;
+  width: 46px;
+  height: 44px;
+  border-style: none;
+  padding-top: 5px;
 }

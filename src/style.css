@@ -1,23 +1,23 @@
 .generic-input {
     width: 74vw;
     border: none;
-    border-radius: 20px;
+    border-radius: 28px;
     font-size: 18px;
     font-weight: 600;
-    padding: 14px 20px;
+    padding: 16px 20px;
     box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
     text-align: left;
     color: black;
 }
 
 .generic-button {
-    width: 74vw;
+    width: 75vw;
     border: none;
-    border-radius: 20px;
+    border-radius: 28px;
     font-size: 18px;
-    font-weight: 600;
+    font-weight: 700;
     color: white;
-    padding: 14px 70px;
+    padding: 17.2px 70px;
     box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
     background-color: #0075FF;
 }
