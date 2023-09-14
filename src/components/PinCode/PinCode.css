@@ -1,7 +1,8 @@
 .pincode {
     width: 80%;
     display: flex;
-    justify-content: space-around;
+    justify-content: center;
+    gap: 15px;
 }
 
 .pincode-input {
@@ -13,4 +14,5 @@
     border-radius: 10px;
     border: none;
     caret-color: transparent;
+    box-shadow: rgba(149, 157, 165, 0.2) 0px 8px 24px;
 }
