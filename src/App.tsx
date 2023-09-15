@@ -1,12 +1,12 @@
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
-import { useLobbyCreation } from './data/storage';
+import { useLobbyFinder } from './data/storage';
 
 import Home from './pages/Home'
 import Login from './pages/Lobby'
 
 function App() {
 
-    const { currentLobby, updateLobby } = useLobbyCreation()
+    const { currentLobby, updateLobby } = useLobbyFinder()
 
     return (
         <Router>

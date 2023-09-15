@@ -1,7 +1,6 @@
 import React from 'react'
 import PinCode from '../../components/PinCode'
 import Request from '../../components/Request'
-import { motion } from "framer-motion"
 
 import '../Home/Home.css'
 import './Lobby.css'

@@ -10,25 +10,29 @@
 .button {
     width: 74vw;
     border: none;
-    border-radius: 28px;
-    font-size: 20px;
-    font-weight: 700;
+    border-radius: 20px;
+    font-size: 18px;
+    font-weight: 600;
     color: white;
     padding: 14px 70px;
+    box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
     background-color: #0075FF;
-    box-shadow: rgba(0, 0, 0, .2) 0 3px 5px -1px,rgba(0, 0, 0, .14) 0 6px 10px 0,rgba(0, 0, 0, .12) 0 1px 18px 0;
 }
 
 .input {
     width: 74vw;
     border: none;
     border-radius: 20px;
-    font-size: 20px;
-    font-weight: 700;
+    font-size: 18px;
+    font-weight: 600;
     padding: 14px 25px;
-    box-shadow: rgba(0, 0, 0, .2) 0 3px 5px -1px,rgba(0, 0, 0, .14) 0 6px 10px 0,rgba(0, 0, 0, .12) 0 1px 18px 0;
+    box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
 }
 
-::placeholder {
-    color: #8a8a8a;
+input:focus {
+    outline: 2px solid rgb(111, 111, 111);
+}
+
+input::placeholder {
+    color: rgb(217, 217, 217);
 }

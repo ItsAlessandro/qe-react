@@ -10,7 +10,7 @@ interface urlStore {
     updateUrl: (newRoomUrl: string[]) => void;
 }
 
-interface lobbyCreation {
+interface lobbyFinder {
     currentLobby: string
     updateLobby: (newLobby: string) => void;
 }
@@ -26,7 +26,7 @@ export const useUrl = create <urlStore> ((set) => ({
     updateUrl: (newRoomUrl: string[]) => set({roomUrl: newRoomUrl})
 }))
 
-export const useLobbyCreation = create <lobbyCreation> ((set) => ({
+export const useLobbyFinder = create <lobbyFinder> ((set) => ({
     currentLobby: '',
     updateLobby: (newLobby: string) => set({currentLobby: newLobby})
 }))

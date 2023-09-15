@@ -1,8 +1,7 @@
 .pincode {
-    width: 80%;
+    width: 74%;
     display: flex;
-    justify-content: center;
-    gap: 15px;
+    justify-content: space-between;
 }
 
 .pincode-input {
