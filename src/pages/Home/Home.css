@@ -2,9 +2,9 @@
     position: absolute;
     top: 0;
     left: 0;
-    height: 35%;
+    height: 34%;
     width: 100%;
-    background-color: white;
+    background-color: #ffffff;
     background-image: url('../../images/HomeBackground.svg');
     background-size: cover;
     background-repeat: no-repeat;
@@ -13,18 +13,17 @@
     background-position-y: -10px;
 }
 
-
 .home-options {
     position: absolute;
-    top: 35%;
-    height: 15%;
+    top: 33.9%;
+    height: 13%;
     width: 100%;
-    background-color: white;
-    box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
+    background-color: #eeeeee;
     z-index: 1;
     display: flex;
     justify-content: center;
     align-items: center;
+    box-shadow: rgba(63, 63, 63, 0.2) 0px 8px 24px;
 }
 
 .home-form {
@@ -33,18 +32,19 @@
     height: 50%;
     width: 100%;
     background-color: rgb(255, 255, 255);
-    padding: 10px;
+    padding: 15px;
+    padding-top: 50px;
     display: flex;
-    gap: 50px;
     flex-direction: column;
-    justify-content: center;
+    justify-content: top;
     align-items: center;
 }
 
 .home-form-buttons {
+    margin-top: 65px;
     display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    gap: 25px;
+    gap: 40px;
 }

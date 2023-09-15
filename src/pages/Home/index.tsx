@@ -25,7 +25,7 @@ function Home () {
                         className='input'
                         type="text"
                         value={userName}
-                        placeholder='Username'
+                        placeholder='nickname'
                         maxLength={20}
                         onChange={(e) => updateName(e.currentTarget.value)}
                     />
