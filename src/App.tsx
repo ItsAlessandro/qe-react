@@ -2,7 +2,7 @@ import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-d
 import { useLobbyFinder } from './data/storage';
 
 import Home from './pages/Home'
-import Login from './pages/Lobby'
+import Lobby from './pages/Lobby'
 
 function App() {
 
@@ -13,7 +13,7 @@ function App() {
             <Routes>
                 <Route path='/'> 
                     <Route index element={<Home/>} />
-                    <Route path={`lobby/${currentLobby}`} element={<Login/>} />
+                    <Route path={`lobby/${currentLobby}`} element={<Lobby/>} />
                 </Route>
             </Routes>
         </Router>

@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react'
-import { useLobbyFinder, useName, useUrl } from '../../data/storage'
+import { useLobbyFinder, useName, useUrl, useRole } from '../../data/storage'
 import { db } from '../../data/firebase'
 import { doc, addDoc, collection, serverTimestamp, query, where, getDocs, updateDoc, onSnapshot, getDoc } from 'firebase/firestore'
 import { useNavigate } from 'react-router-dom'
@@ -16,6 +16,7 @@ function Home () {
     const { roomUrl, updateUrl } = useUrl()
     const { userName, updateName } = useName()
     const { currentLobby, updateLobby } = useLobbyFinder()
+    const { isOwner, updateRole } = useRole()
 
     const [ joining, setJoining ] = useState(false)
     const [ listening, setListening ] = useState(false) // Participate
@@ -84,6 +85,7 @@ function Home () {
                     gamePlayers: [userName],
                     gamePending: []
                 })
+                updateRole(true)
                 updateLobby(response.id)
                 setJoining(true)
             } catch (error) {
@@ -95,7 +97,7 @@ function Home () {
     async function handleJoin () {    
         const currentUrl : string = roomUrl.join('')
         if (await credentialCheck(currentUrl, userName, 'JOIN')) { // username & url valid
-            const q = query(collection(db, 'sessions'), where('roomUrl', '==', currentUrl))    
+            const q = query(collection(db, 'sessions'), where('roomUrl', '==', currentUrl))
             try {
                 const querySnapshot = await getDocs(q)
                 if (!querySnapshot.empty) {

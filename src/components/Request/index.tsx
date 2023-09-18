@@ -1,6 +1,6 @@
-import { useState } from 'react';
-import tick from '../../images/tick.svg';
-import reject from '../../images/reject.svg';
+import { useState } from 'react'
+import tick from '../../images/tick.svg'
+import reject from '../../images/reject.svg'
 import './Request.css';
 
 interface RequestProps {
@@ -11,30 +11,32 @@ interface RequestProps {
 const Request: React.FC<RequestProps> = ({ colour, nickname }) => {
   const [ outcome, setOutcome ] = useState(-1)
 
-  function handleClick(event: React.MouseEvent<HTMLButtonElement>) {
-    setOutcome(parseInt((event.target as HTMLButtonElement).id))
+  function handleClick(id: number) {
+    setOutcome(id)
   }
 
   if (outcome === -1) {
     return (
       <div className='request'>
         <div className='request-label'>
+          <ScaleText maxFontSize={20}>
           <p className='request-nickname'>{nickname}</p>
+          </ScaleText>
         </div>
         <div>
-          <button className='request-button' id='0' style={{backgroundColor:'#000000'}} onClick={(e) => handleClick(e)}>
-            <img src={reject} id='0' alt=''></img>
+          <button className='request-button' id='0' style={{backgroundColor:'#000000'}} onClick={() => handleClick(0)}>
+            <img src={reject} alt='' onClick={() => handleClick(0)}></img>
           </button>
         </div>
         <div>
-          <button className='request-button' id='1' style={{backgroundColor:'#0075ff'}} onClick={(e) => handleClick(e)}>
-            <img src={tick} id='1' alt=''></img>
+          <button className='request-button' id='1' style={{backgroundColor:'#0075ff'}} onClick={() => handleClick(1)}>
+            <img src={tick} alt='' onClick={() => handleClick(1)}></img>
           </button>
         </div>
       </div>
     );
   } else if (outcome === 0) {
-    return (<div></div>);
+    return (<div></div>)
   } else {
     return (
       <div className='request'>

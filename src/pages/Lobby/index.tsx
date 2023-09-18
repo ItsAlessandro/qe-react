@@ -1,12 +1,15 @@
-import React from 'react'
+import { useRole } from '../../data/storage'
 import PinCode from '../../components/PinCode'
 import Request from '../../components/Request'
+
 
 import '../Home/Home.css'
 import './Lobby.css'
 
 
 function Lobby() {
+  const { isOwner, updateRole } = useRole()
+  
   return (
     <div className='lobby home'>
             <div className='lobby-header home-header'></div>
@@ -20,13 +23,16 @@ function Lobby() {
                 <Request {...{ colour: "#4287f5", nickname: "lucalucalucalucaluca" }}></Request>
                 <Request {...{ colour: "#4287f5", nickname: "marco" }}></Request>
               </div>
-              <div className='lobby-startbutton-container'>
-                <button className='button'>
-
-                 Avvia
-
-                </button>
-              </div>
+              {isOwner ? 
+                <div className='lobby-footer'>
+                    <button className='button'>Avvia</button>
+                    <button className='button' style={{ backgroundColor: 'black', width: '20%' }}> Home </button>
+                </div>
+              :
+                <div className='lobby-footer'>
+                  <button className='button' style={{ backgroundColor: 'black'}}> Home </button>
+                </div>
+              }
             </div>
     </div>
   )

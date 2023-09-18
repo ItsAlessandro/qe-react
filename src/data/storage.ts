@@ -15,6 +15,11 @@ interface lobbyFinder {
     updateLobby: (newLobby: string) => void;
 }
 
+interface roleStore {
+    isOwner: boolean
+    updateRole: (newRole: boolean) => void;
+}
+
 
 export const useName = create <nameStore> ((set) => ({
     userName: '',
@@ -29,4 +34,9 @@ export const useUrl = create <urlStore> ((set) => ({
 export const useLobbyFinder = create <lobbyFinder> ((set) => ({
     currentLobby: '',
     updateLobby: (newLobby: string) => set({currentLobby: newLobby})
+}))
+
+export const useRole = create <roleStore> ((set) => ({
+    isOwner: false,
+    updateRole: (newRole: boolean) => set({isOwner: newRole})
 }))
