@@ -1,5 +1,5 @@
-import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
-import { useLobbyFinder } from './data/storage';
+import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom'
+import { useLobbyFinder } from './data/storage'
 
 import Home from './pages/Home'
 import Lobby from './pages/Lobby'

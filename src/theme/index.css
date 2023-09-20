@@ -11,10 +11,10 @@
     width: 74%;
     border: none;
     border-radius: 28px;
-    font-size: 18px;
+    font-size: 20px;
     font-weight: 600;
     color: white;
-    padding: 14px 0px;
+    padding: 17px 0px 17px 0px;
     box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
     background-color: #0075FF;
 }
@@ -22,8 +22,8 @@
 .input {
     width: 74vw;
     border: none;
-    border-radius: 28px;
-    font-size: 18px;
+    border-radius: 20px;
+    font-size: 20px;
     font-weight: 600;
     padding: 14px 25px;
     box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
@@ -35,4 +35,11 @@ input:focus {
 
 input::placeholder {
     color: rgb(217, 217, 217);
+}
+
+.button-home-icon {
+    height: 58px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }

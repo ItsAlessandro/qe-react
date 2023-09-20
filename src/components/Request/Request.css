@@ -43,5 +43,7 @@
   width: 46px;
   height: 44px;
   border-style: none;
-  padding-top: 5px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }

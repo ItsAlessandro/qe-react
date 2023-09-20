@@ -1,3 +1,4 @@
+import { useState } from 'react'
 import './Popup.css';
 import sadbear from '../../images/sadbear.svg';
 import sadlion from '../../images/sadlion.svg';
@@ -5,7 +6,10 @@ import sadlion from '../../images/sadlion.svg';
 interface PopupProps {
   imageIndex: number
   text: string
-  buttons: {text: string, colour: string}[]
+  display: boolean
+  setDisplay: (display: boolean) => void
+  isLoading: boolean
+  setLoading: (refused: boolean) => void
 }
 
 const images = [
@@ -23,8 +27,12 @@ const images = [
   },
 ];
 
-const Popup: React.FC<PopupProps> = ({imageIndex, text, buttons}) => {
+const Popup: React.FC<PopupProps> = ({imageIndex, text, display, setDisplay, isLoading, setLoading}) => {
   
+  const PopupSettings = {
+    display: display ? "flex" : "none"
+  }
+
   const indexToImage = (imageIndex: number) => {
     if (imageIndex < 0 || imageIndex >= images.length) {
       return null;
@@ -32,10 +40,16 @@ const Popup: React.FC<PopupProps> = ({imageIndex, text, buttons}) => {
     
     return images[imageIndex];
   };
+
+
+  function handleClick() {
+    if (isLoading) setLoading(false)
+    setDisplay(false)
+  }
   
   const image = indexToImage(imageIndex)
   return (
-    <div className='popup-background'>
+    <div className='popup-background' style={PopupSettings}>
       <div className='popup'>
         <div className='popup-img-container'>
           <img className='popup-img' src={image?.src}></img>
@@ -46,19 +60,17 @@ const Popup: React.FC<PopupProps> = ({imageIndex, text, buttons}) => {
           </p>
         </div>
         <div className='popup-buttons-container'>
-          {buttons.map((button) => (
-            <button
-              key={button.text}
-              style={{ backgroundColor: button.colour }}
-              className='button'
-            >
-            {button.text}
-            </button>
-          ))}
+          <button 
+          className='button'
+          style={{backgroundColor:"black"}}
+          onClick={() => handleClick()}
+          >
+            Indietro
+          </button>
         </div>
       </div>
     </div>
   )
 }
 
-export default Popup;
+export default Popup
