@@ -51,3 +51,11 @@
     align-items: center;
     gap: 40px;
 }
+
+
+.home-form-input {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+}
