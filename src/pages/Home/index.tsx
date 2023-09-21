@@ -215,7 +215,7 @@ function Home() {
             <div className="home-header"> </div>
 
             <div className="home-options">
-                <PinCode abled={true} />
+                <PinCode enabled={true} />
             </div>
             
             <div className="home-form">

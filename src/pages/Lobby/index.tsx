@@ -101,7 +101,7 @@ function Lobby() {
             <div className='lobby-header home-header'></div>
 
             <div className='lobby-code home-options'>
-                <PinCode abled={false} />
+                <PinCode enabled={false} />
             </div>
 
             <div className='lobby-body'>
