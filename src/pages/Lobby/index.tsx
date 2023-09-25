@@ -19,6 +19,7 @@ function Lobby() {
     const { isOwner, updateRole } = useRole()
     const { currentLobby, updateLobby } = useLobbyFinder()
     const [ pending, setPending ] = useState<string[]>([])
+    const [ playersCount, setPlayersCount ] = useState(1)
     const navigate = useNavigate()
 
     async function handleRemoveLobby () {
@@ -53,6 +54,7 @@ function Lobby() {
         let currentPending : string[] = response.data()?.gamePending
         
         currentPlayers.push(currentPending.splice(index, 1)[0])
+        setPlayersCount(oldCount => ++oldCount)
 
         await updateDoc(doc(db, 'sessions', currentLobby), {
             gamePlayers: currentPlayers,
@@ -60,9 +62,21 @@ function Lobby() {
         })
     }
 
+    async function createGame () {
+        const response = await getDoc(doc(db, 'sessions', currentLobby))
+        let currentPlayers : string[] = response.data()?.gamePlayers
+        if (currentPlayers.length > 2) {
+            await updateDoc(doc(db, 'sessions', currentLobby), {
+                gameStarted: true
+            })
+            navigate(`../game/${currentLobby}`)
+        } else {
+            alert("PER BOADO :D:D:D:D:D")
+        }
+    }
+
     useEffect(() => {
         const unsub = onSnapshot(doc(db, 'sessions', currentLobby), (doc) => {
-            console.log(removedLobby)
             if (!removedLobby) {
                 let playersToDisplay = [...doc.data()?.gamePlayers, ...doc.data()?.gamePending]
                 let counter = 0;
@@ -103,43 +117,58 @@ function Lobby() {
         return () => { unsub() }
     }, [])
 
-  return (
-    <div className='lobby home'>
-            <div className='lobby-header home-header'></div>
+    useEffect(() => {
+        const unsub = onSnapshot(doc(db, 'sessions', currentLobby), (doc) => {
+            if (doc.data()?.gameStarted) {
+                navigate(`../game/${currentLobby}`)
+            } 
+        })
+        return () => { unsub() }
+    }, [])
 
-            <div className='lobby-code home-options'>
-                <PinCode enabled={false} />
-            </div>
+    return (
+        <div className='lobby home'>
+                <div className='lobby-header home-header'></div>
 
-            <div className='lobby-body'>
-              <div className='lobby-container'>
-              {pending}
-              </div>
-                {isOwner ? 
-                <div className='lobby-footer'>
-                    <button className='button'>Avvia</button>
-                    <button 
-                        className='button button-home-icon' 
-                        style={{ backgroundColor: 'black', width: '20%' }}
-                        onClick={() => handleRemoveLobby()}
-                    >
-                        <img src={home}></img> 
-                    </button>
+                <div className='lobby-code home-options'>
+                    <PinCode enabled={false} />
                 </div>
-                :
-                <div className='lobby-footer'>
-                    <button 
-                        className='button button-home-icon' 
-                        style={{ backgroundColor: 'black'}}
-                        onClick={() => handleExit(userName)}
-                    >
-                        <img src={home}></img> 
-                    </button>
+
+                <div className='lobby-body'>
+                <div className='lobby-container'>
+                {pending}
                 </div>
-              }
-            </div>
-    </div>
-  )
+                    {isOwner ? 
+                    <div className='lobby-footer'>
+                        <button 
+                            className='button'
+                            style={playersCount < 3 ? {backgroundColor: '#7BB8FF'} : {backgroundColor: '#0075FF'}}
+                            onClick={() => createGame()}
+                        >
+                            Avvia
+                        </button>
+                        <button 
+                            className='button button-home-icon' 
+                            style={{ backgroundColor: 'black', width: '20%' }}
+                            onClick={() => handleRemoveLobby()}
+                        >
+                            <img src={home}></img> 
+                        </button>
+                    </div>
+                    :
+                    <div className='lobby-footer'>
+                        <button 
+                            className='button button-home-icon' 
+                            style={{ backgroundColor: 'black'}}
+                            onClick={() => handleExit(userName)}
+                        >
+                            <img src={home}></img> 
+                        </button>
+                    </div>
+                }
+                </div>
+        </div>
+    )
 }
 
 export default Lobby

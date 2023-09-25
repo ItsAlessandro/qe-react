@@ -30,7 +30,7 @@
 }
 
 input:focus {
-    outline: 2px solid #a6c6ec;
+    outline: 3px solid #bddafb;
 }
 
 input::placeholder {

@@ -16,7 +16,7 @@
     margin-right: auto;
 }
 
-.input {
+.input-game {
     display: block;
     margin-bottom: 4vh;
     margin-right: auto;
@@ -24,7 +24,7 @@
     width: 80%;
 }
 
-.button {
+.button-game {
     display: block;
     margin-right: auto;
     margin-left: auto;

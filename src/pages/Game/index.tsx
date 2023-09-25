@@ -1,31 +1,24 @@
-import { useState } from 'react';
+import { useState } from 'react'
 
-import './Game.css';
+import AnimalAuction from '../../components/AnimalAuction'
 
-import Crown from '../../images/Crown.png';
-
-import ForestPoints from '../../images/PointBackgrounds/ForestPoints.png';
-
-import AnimalAuction from '../../components/AnimalAuction';
+import './Game.css'
+import Crown from '../../images/Crown.png'
+import ForestPoints from '../../images/PointBackgrounds/ForestPoints.png'
 
 function Game() {
-    var players = [2, 3, 5, 7, 11];
-    const [i, setI] = useState(0);
+    let players = [2, 3, 5, 7, 11]
 
     function togglePoints(event: React.MouseEvent<HTMLDivElement, MouseEvent>) {
-        var points = document.getElementById("points-view");
+        let points = document.getElementById("points-view")
 
         if (points) {
-            if (points.style.display === "none") {
-                points.style.display = "block";
-            }
-            else {
-                points.style.display = "none";
-            }
+            if (points.style.display === "none") 
+                points.style.display = "block"
+            else 
+                points.style.display = "none"
         }
-
-        var playerId = (event.target as HTMLInputElement).id;
-
+        let playerId = (event.target as HTMLInputElement).id
     }
 
     return (
@@ -34,9 +27,9 @@ function Game() {
                 <AnimalAuction />
             </div>
 
-            <input className='input' />
+            <input className='input input-game' type='number'/>
 
-            <button className='button'>
+            <button className='button button-game'>
                 Conferma
             </button>
 
@@ -44,10 +37,14 @@ function Game() {
                 <div className='players-container'>
                     {players.map((point, index) => (
                         <div className='player-info'>
-                            <div >
+                            <div>
                                 <img className='player-status' src={Crown} />
                             </div>
-                            <div id={index.toString()} className='player-points' onClick={(e) => togglePoints(e)}>
+                            <div 
+                                id={index.toString()} 
+                                className='player-points' 
+                                onClick={(e) => togglePoints(e)}
+                            >
                                 {point}
                             </div>
                         </div>
@@ -56,7 +53,6 @@ function Game() {
 
                 <div id='points-view' className='points-view'>
                     <h2>Points</h2>
-
                 </div>
             </div>
         </div >
