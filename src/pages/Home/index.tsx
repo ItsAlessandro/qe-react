@@ -5,11 +5,15 @@ import { doc, addDoc, collection, serverTimestamp, query, where, getDocs, update
 import { useNavigate } from 'react-router-dom'
 
 import PinCode from '../../components/PinCode'
+import Popup from '../../components/Popup'
 
 import './Home.css'
 import '../../theme/index.css'
 
-function Home () {
+var popupText: string = ""
+var popupImage: number = 0
+
+function Home() {
 
     const navigate = useNavigate()
 
@@ -21,12 +25,16 @@ function Home () {
     const [ joining, setJoining ] = useState(false)
     const [ listening, setListening ] = useState(false) // Participate
 
+    const [ displayPopUp, setDisplay ] = useState(false)
+
     useEffect(() => { // joins to the latest update of currentLobby state
         if (joining) {
             try {
                 navigate(`lobby/${currentLobby}`)
             } catch (error) {
-                alert('ERROR WHILE ACCESSING THE ROOM')
+                popupImage = 1
+                popupText = "Si è verificato un errore durante l'accesso alla stanza"
+                setDisplay(true)
             }
         }      
     }, [joining])
@@ -41,18 +49,24 @@ function Home () {
                     }
                 })
             } catch (error) {
-                alert('ERROR WHILE CONNECTING TO DATABASE')
+                popupImage = 1
+                popupText = 'Si è verificato un errore durante la connessione al database'
+                setDisplay(true)
             }
         }
-    }, [listening]) 
+    }, [listening])
 
     async function credentialCheck (url : string, username : string, intent : string) {
         
         if (username.length < 6 || username.length > 24) {
-            alert('INVALID USERNAME')
+            popupImage = 1
+            popupText = 'Username invalido'
+            setDisplay(true)
             return false;
         } else if (url.length != 6) {
-            alert('INVALID URL')
+            popupImage = 1
+            popupText = 'URL invalido'
+            setDisplay(true)
             return false;
         }
 
@@ -61,14 +75,26 @@ function Home () {
         try {
             const querySnapshot = await getDocs(q)
             if (intent === 'CREATE') {
-                if (querySnapshot.empty) return true
-                else alert('URL ALREADY IN USE')
+                if (querySnapshot.empty) 
+                    return true
+                else {
+                    popupImage = 1
+                    popupText = 'URL già in uso'
+                    setDisplay(true)
+                }
             } else if (intent === 'JOIN') {
-                if (querySnapshot.empty) alert('ROOM NOT FOUND')
-                else return true
+                if (querySnapshot.empty) {
+                    popupImage = 1
+                    popupText = 'Stanza non trovata'
+                    setDisplay(true)
+                }
+                else
+                    return true
             }
         } catch (error) {
-            alert('ERROR WHILE ACCESSING DATABASE')
+            popupImage = 1
+            popupText = "Si è verificato un errore durante l'accesso al database"
+            setDisplay(true)
         }
         return false
     }
@@ -89,7 +115,9 @@ function Home () {
                 updateLobby(response.id)
                 setJoining(true)
             } catch (error) {
-                alert('ERROR WHILE CREATING THE ROOM')
+                popupImage = 1
+                popupText = "Si è verificato un errore durante la creazione della stanza"
+                setDisplay(true)
             }
         }
     }
@@ -106,7 +134,9 @@ function Home () {
                             let pendingArray = [...document.data().gamePending]
                             let joinedArray = [...document.data().gamePlayers]
                             if (pendingArray.find(e => e == userName) || joinedArray.find(e => e == userName)) {
-                                alert('USERNAME ALREADY IN USE')
+                                setDisplay(true)
+                                popupImage = 1
+                                popupText = "L'username è già stato preso da un altro giocatore"
                             } else {
                                 try {
                                     pendingArray.push(userName)
@@ -116,22 +146,32 @@ function Home () {
                                     updateLobby(document.id)
                                     setListening(true)
                                 } catch (error) {
-                                    alert('ERROR WHILE UPDATING DATABASE')
+                                    popupImage = 1
+                                    popupText = "Si è verificato un errore durante l'aggiornamento del database"
+                                    setDisplay(true)
                                 }
                             }
                         } else {
-                            alert('GAME ALREADY STARTED')
+                            popupImage = 1
+                            popupText = "Partita già iniziata"
+                            setDisplay(true)
                         }
                     })
                 }
             } catch (error) {
-                alert('ERROR WHILE ACCESSING DATABASE')
+                popupImage = 1
+                popupText = "Si è verificato un errore durante l'accesso al database"
+                setDisplay(true)
             }
         }
     }
 
     return (
         <div className='home'>
+            {
+                displayPopUp && 
+                <Popup imageIndex={popupImage} text={popupText} display={displayPopUp} setDisplay={setDisplay}/>
+            }
             <div className="home-header"> </div>
 
             <div className="home-options">
@@ -144,7 +184,7 @@ function Home () {
                         className='input'
                         type="text"
                         value={userName}
-                        placeholder='Username'
+                        placeholder='username'
                         maxLength={24}
                         onChange={(e) => updateName(e.currentTarget.value)}
                     />
