@@ -6,12 +6,14 @@ import { useNavigate } from 'react-router-dom'
 
 import PinCode from '../../components/PinCode'
 import Popup from '../../components/Popup'
+import Popup from '../../components/Popup'
 
 import './Home.css'
 import '../../theme/index.css'
 
-var popupText: string = ""
-var popupImage: number = 0
+let popupText: string = ""
+let popupImage: number = 0
+let auxListen: boolean = false
 
 function Home() {
 
@@ -24,8 +26,23 @@ function Home() {
 
     const [ joining, setJoining ] = useState(false)
     const [ listening, setListening ] = useState(false) // Participate
-
+    const [ loadingLobby, setLoadingLobby ] = useState(false)
     const [ displayPopUp, setDisplay ] = useState(false)
+
+    async function removeName (name: string) {
+        const response = await getDoc(doc(db, 'sessions', currentLobby))
+        let currentPending : string[] = response.data()?.gamePending
+        currentPending.splice(currentPending.indexOf(name), 1)
+        await updateDoc(doc(db, 'sessions', currentLobby), {
+            gamePending: currentPending
+        })
+    }
+
+    if (!loadingLobby && listening) {
+        auxListen = false
+        setListening(false)
+        removeName(userName)
+    }
 
     useEffect(() => { // joins to the latest update of currentLobby state
         if (joining) {
@@ -44,8 +61,19 @@ function Home() {
             try {
                 const unsub = onSnapshot(doc(db, 'sessions', currentLobby), (doc) => {
                     let updatedPlayers : string [] = doc.data()?.gamePlayers
-                    if (updatedPlayers.find(e => e == userName)) {
+                    let updatedPending : string [] = doc.data()?.gamePending
+                    if (updatedPlayers.find(e => e === userName) && listening) {
                         setJoining(true)
+                    } else if (listening) {
+                        console.log(listening)
+                        if (!updatedPending.find(e => e === userName) && auxListen) {
+                            setListening(false)
+                            setLoadingLobby(false)
+                            setDisplay(false)
+                            popupImage = 1
+                            popupText = 'Rifiutato dalla partita'
+                            setDisplay(true)
+                        }
                     }
                 })
             } catch (error) {
@@ -143,8 +171,14 @@ function Home() {
                                     await updateDoc(doc(db, 'sessions', document.id), {
                                         gamePending: pendingArray
                                     })
+                                    auxListen = true
+                                    setLoadingLobby(true)
+                                    popupImage = 2
+                                    popupText = "Caricando la partita..."
+                                    setDisplay(true)
                                     updateLobby(document.id)
                                     setListening(true)
+                                    
                                 } catch (error) {
                                     popupImage = 1
                                     popupText = "Si è verificato un errore durante l'aggiornamento del database"
@@ -170,12 +204,19 @@ function Home() {
         <div className='home'>
             {
                 displayPopUp && 
-                <Popup imageIndex={popupImage} text={popupText} display={displayPopUp} setDisplay={setDisplay}/>
+                <Popup 
+                    imageIndex={popupImage} 
+                    text={popupText} 
+                    display={displayPopUp} 
+                    setDisplay={setDisplay}
+                    isLoading={loadingLobby}
+                    setLoading={setLoadingLobby}
+                />
             }
             <div className="home-header"> </div>
 
             <div className="home-options">
-                <PinCode />
+                <PinCode enabled={true} />
             </div>
             
             <div className="home-form">
@@ -199,3 +240,4 @@ function Home() {
 }
 
 export default Home
+

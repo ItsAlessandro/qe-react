@@ -43,11 +43,19 @@
 }
 
 .home-form-buttons {
-    width: 292px;
+    width: 100%;
     margin-top: 45px;
     display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: center;
     gap: 40px;
+}
+
+
+.home-form-input {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
 }
