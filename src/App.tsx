@@ -4,6 +4,7 @@ import { useLobbyFinder } from './data/storage'
 import Home from './pages/Home'
 import Lobby from './pages/Lobby'
 import Game from './pages/Game'
+import Leaderboard from './pages/Leaderboard'
 
 function App() {
 

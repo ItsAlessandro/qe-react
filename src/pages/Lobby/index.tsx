@@ -12,6 +12,9 @@ import { useLobbyFinder } from '../../data/storage'
 import '../Home/Home.css'
 import './Lobby.css'
 
+let popupText: string = ""
+let popupImage: number = 0
+
 let removedLobby = false
 
 function Lobby() {
@@ -21,6 +24,10 @@ function Lobby() {
     const { currentLobby, updateLobby } = useLobbyFinder()
     const [ pending, setPending ] = useState<string[]>([])
     const [ playersCount, setPlayersCount ] = useState(1)
+    const [ displayPopUp, setDisplay ] = useState(false)
+    const [ loadingGame, setLoadingGame ] = useState(false)
+
+
     const navigate = useNavigate()
 
     async function handleRemoveLobby () {
@@ -72,7 +79,9 @@ function Lobby() {
             })
             navigate(`../game/${currentLobby}`)
         } else {
-            alert("PER BOADO :D:D:D:D:D")
+            popupImage = 1
+            popupText = "Ci devono essere almeno 3 giocatori per iniziare la partita"
+            setDisplay(true)
         }
     }
 
@@ -129,6 +138,17 @@ function Lobby() {
 
     return (
         <div className='lobby home'>
+            {
+                displayPopUp && 
+                <Popup 
+                    imageIndex={popupImage} 
+                    text={popupText} 
+                    display={displayPopUp} 
+                    setDisplay={setDisplay}
+                    isLoading={loadingGame}
+                    setLoading={setLoadingGame}
+                />
+            }
                 <div className='lobby-header home-header'></div>
 
                 <div className='lobby-code home-options'>

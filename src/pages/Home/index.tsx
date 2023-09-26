@@ -6,7 +6,6 @@ import { useNavigate } from 'react-router-dom'
 
 import PinCode from '../../components/PinCode'
 import Popup from '../../components/Popup'
-import Popup from '../../components/Popup'
 
 import './Home.css'
 import '../../theme/index.css'
@@ -174,7 +173,7 @@ function Home() {
                                     auxListen = true
                                     setLoadingLobby(true)
                                     popupImage = 2
-                                    popupText = "Caricando la partita..."
+                                    popupText = "Aspettando che il proprietario della stanza accetti la tua richiesta"
                                     setDisplay(true)
                                     updateLobby(document.id)
                                     setListening(true)
@@ -240,4 +239,3 @@ function Home() {
 }
 
 export default Home
-

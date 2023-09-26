@@ -3,7 +3,7 @@ import './Popup.css';
 import sadbear from '../../images/sadbear.svg';
 import sadlion from '../../images/sadlion.svg';
 
-interface PopupProps {
+interface Props {
   imageIndex: number
   text: string
   display: boolean
@@ -27,9 +27,9 @@ const images = [
   },
 ];
 
-const Popup: React.FC<PopupProps> = ({imageIndex, text, display, setDisplay, isLoading, setLoading}) => {
+const Popup: React.FC<Props> = ({imageIndex, text, display, setDisplay, isLoading, setLoading}) => {
   
-  const PopupSettings = {
+  const popupSettings = {
     display: display ? "flex" : "none"
   }
 
@@ -49,7 +49,7 @@ const Popup: React.FC<PopupProps> = ({imageIndex, text, display, setDisplay, isL
   
   const image = indexToImage(imageIndex)
   return (
-    <div className='popup-background' style={PopupSettings}>
+    <div className='popup-background' style={popupSettings}>
       <div className='popup'>
         <div className='popup-img-container'>
           <img className='popup-img' src={image?.src}></img>
