@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react'
 import { useLobbyFinder, useName, useUrl, useRole } from '../../data/storage'
 import { db } from '../../data/firebase'
-import { doc, addDoc, collection, serverTimestamp, query, where, getDocs, updateDoc, onSnapshot, getDoc } from 'firebase/firestore'
+import { doc, addDoc, collection, serverTimestamp, query, where, getDocs, updateDoc, onSnapshot, getDoc, Unsubscribe } from 'firebase/firestore'
 import { useNavigate } from 'react-router-dom'
 
 import PinCode from '../../components/PinCode'
@@ -57,30 +57,29 @@ function Home() {
 
     useEffect(() => {
         if (listening) {
-            try {
-                const unsub = onSnapshot(doc(db, 'sessions', currentLobby), (doc) => {
-                    let updatedPlayers : string [] = doc.data()?.gamePlayers
-                    let updatedPending : string [] = doc.data()?.gamePending
-                    if (updatedPlayers.find(e => e === userName) && listening) {
-                        setJoining(true)
-                    } else if (listening) {
-                        console.log(listening)
-                        if (!updatedPending.find(e => e === userName) && auxListen) {
-                            setListening(false)
-                            setLoadingLobby(false)
-                            setDisplay(false)
-                            popupImage = 1
-                            popupText = 'Rifiutato dalla partita'
-                            setDisplay(true)
+            const unsub = onSnapshot(doc(db, 'sessions', currentLobby), (doc) => {
+                let updatedPlayers : string [] = doc.data()?.gamePlayers
+                let updatedPending : string [] = doc.data()?.gamePending
+                if (updatedPlayers.find(e => e === userName) && listening) {
+                    setJoining(true)
+                } else if (listening) {
+                    if (!updatedPending.find(e => e === userName) && auxListen) {
+                        setListening(false)
+                        setLoadingLobby(false)
+                        setDisplay(false)
+                        popupImage = 1
+                        popupText = 'Rifiutato dalla partita'
+                        setDisplay(true)
                         }
                     }
                 })
-            } catch (error) {
-                popupImage = 1
-                popupText = 'Si è verificato un errore durante la connessione al database'
-                setDisplay(true)
-            }
+            
+            popupImage = 1
+            popupText = 'Si è verificato un errore durante la connessione al database'
+            setDisplay(true)  
+            return () => { unsub() }      
         }
+        // return () => { unsub() }
     }, [listening])
 
     async function credentialCheck (url : string, username : string, intent : string) {

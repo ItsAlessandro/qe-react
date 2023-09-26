@@ -15,8 +15,6 @@ import './Lobby.css'
 let popupText: string = ""
 let popupImage: number = 0
 
-let removedLobby = false
-
 function Lobby() {
 
     const { userName, updateName } = useName()
@@ -31,7 +29,6 @@ function Lobby() {
     const navigate = useNavigate()
 
     async function handleRemoveLobby () {
-        removedLobby = true
         await deleteDoc(doc(db, 'sessions', currentLobby))
         navigate('/')
     }
@@ -87,8 +84,12 @@ function Lobby() {
 
     useEffect(() => {
         const unsub = onSnapshot(doc(db, 'sessions', currentLobby), (doc) => {
-            if (!removedLobby) {
-                let playersToDisplay = [...doc.data()?.gamePlayers, ...doc.data()?.gamePending]
+                if (doc.data() === undefined) { // session removed
+                    navigate('/')
+                }
+                let playersToDisplay = doc.data() !== undefined 
+                ?  [...doc.data()?.gamePlayers, ...doc.data()?.gamePending] : []
+
                 let counter = 0;
                 playersToDisplay = playersToDisplay.map(
                     function (val: string, index : number) {
@@ -122,7 +123,7 @@ function Lobby() {
                     }
                 )
                 setPending(playersToDisplay)
-            }
+            
         })
         return () => { unsub() }
     }, [])
