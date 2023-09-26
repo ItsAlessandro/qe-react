@@ -79,7 +79,6 @@ function Home() {
             setDisplay(true)  
             return () => { unsub() }      
         }
-        // return () => { unsub() }
     }, [listening])
 
     async function credentialCheck (url : string, username : string, intent : string) {
@@ -128,6 +127,17 @@ function Home() {
     
     async function handleCreation () {
         const currentUrl : string = roomUrl.join('')
+
+        const shuffleArray = (inputArray: number[]): number[] => {
+            const shuffledArray = [...inputArray];
+            for (let i = shuffledArray.length - 1; i > 0; i--) {
+                const randomIndex = Math.floor(Math.random() * (i + 1));
+                [shuffledArray[i], shuffledArray[randomIndex]] = [shuffledArray[randomIndex], shuffledArray[i]];
+            }
+            return shuffledArray;
+        };
+        const shuffledArray = shuffleArray([1, 2, 3, 4, 5])
+
         if (await credentialCheck(currentUrl, userName, 'CREATE')) { // username & url valid
             try {
                 const response = await addDoc(collection(db, 'sessions'), {
@@ -135,7 +145,11 @@ function Home() {
                     roomOwner: userName,
                     gameStarted: false,
                     gamePlayers: [userName],
-                    gamePending: []
+                    gamePending: [],
+                    gameIndexes: [...shuffledArray],
+                    [userName]: {
+                        playerID: shuffledArray[0]
+                    }     
                 })
                 updateRole(true)
                 updateLobby(response.id)

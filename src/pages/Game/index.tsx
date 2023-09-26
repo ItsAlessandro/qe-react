@@ -1,4 +1,7 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
+import { db } from '../../data/firebase'
+import { getDoc, doc } from 'firebase/firestore'
+import { useLobbyFinder } from '../../data/storage'
 
 import AnimalAuction from '../../components/AnimalAuction'
 
@@ -7,7 +10,18 @@ import Crown from '../../images/Crown.png'
 import ForestPoints from '../../images/PointBackgrounds/ForestPoints.png'
 
 function Game() {
-    let players = [2, 3, 5, 7, 11]
+    
+    const { currentLobby, updateLobby } = useLobbyFinder()
+
+    const [ players, setPlayers ] = useState<string[]>()
+
+    useEffect(() => {
+        const fetchData = async () => {
+            const docSnap = await getDoc(doc(db, 'sessions', currentLobby))
+            setPlayers(docSnap.data()?.gamePlayers)
+        } 
+        fetchData()
+    }, [])
 
     function togglePoints(event: React.MouseEvent<HTMLDivElement, MouseEvent>) {
         let points = document.getElementById("points-view")
@@ -29,14 +43,12 @@ function Game() {
 
             <input className='input input-game' type='number'/>
 
-            <button className='button button-game'>
-                Conferma
-            </button>
+            <button className='button button-game'>Conferma</button>
 
             <div className='players'>
                 <div className='players-container'>
-                    {players.map((point, index) => (
-                        <div className='player-info'>
+                    {players?.map((point, index) => (
+                        <div className='player-info' key={index}>
                             <div>
                                 <img className='player-status' src={Crown} />
                             </div>
