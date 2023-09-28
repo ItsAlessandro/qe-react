@@ -1,12 +1,12 @@
 import { useName, useRole } from '../../data/storage'
-import { useEffect, useState } from 'react'
+import { useEffect, useState, useMemo } from 'react'
 import { useNavigate } from 'react-router-dom'
 import PinCode from '../../components/PinCode'
 import Request from '../../components/Request'
 import Popup from '../../components/Popup'
 import home from '../../images/home.svg'
 import { db } from '../../data/firebase'
-import { doc, updateDoc, onSnapshot, getDoc, deleteDoc } from 'firebase/firestore'
+import { doc, updateDoc, onSnapshot, getDoc, deleteDoc, deleteField } from 'firebase/firestore'
 import { useLobbyFinder } from '../../data/storage'
 
 import '../Home/Home.css'
@@ -15,7 +15,7 @@ import './Lobby.css'
 let popupText: string = ""
 let popupImage: number = 0
 
-let removedLobby: boolean = false
+let removedLobby = false
 
 function Lobby() {
 
@@ -27,10 +27,17 @@ function Lobby() {
     const [ displayPopUp, setDisplay ] = useState(false)
     const [ loadingGame, setLoadingGame ] = useState(false)
 
+
     const navigate = useNavigate()
 
+    async function getColours () {
+        const response = await getDoc(doc(db, 'data', 'colours'))
+        setColours(response.data()?.colours)
+    }
+
+    getColours() // SCOPPO, si può usare useMemo per getColours? (con lo useEffect otterrei il risultato troppo tardi, dopo il rerender)
+
     async function handleRemoveLobby () {
-        removedLobby = true
         await deleteDoc(doc(db, 'sessions', currentLobby))
         navigate('/')
     }
@@ -40,7 +47,8 @@ function Lobby() {
         let currentPlayers : string[] = response.data()?.gamePlayers
         currentPlayers.splice(currentPlayers.indexOf(name), 1)
         await updateDoc(doc(db, 'sessions', currentLobby), {
-            gamePlayers: currentPlayers
+            gamePlayers: currentPlayers,
+            [name]: deleteField()
         })
         navigate('/')
     }
@@ -65,7 +73,10 @@ function Lobby() {
 
         await updateDoc(doc(db, 'sessions', currentLobby), {
             gamePlayers: currentPlayers,
-            gamePending: currentPending
+            gamePending: currentPending,
+            [currentPlayers[currentPlayers.length - 1]]: {
+                playerID: response.data()?.gameIndexes[currentPlayers.length - 1]
+            }
         })
     }
 
@@ -96,8 +107,12 @@ function Lobby() {
 
     useEffect(() => {
         const unsub = onSnapshot(doc(db, 'sessions', currentLobby), (doc) => {
-            if (!removedLobby) {
-                let playersToDisplay = [...doc.data()?.gamePlayers, ...doc.data()?.gamePending]
+                if (doc.data() === undefined) { // session removed
+                    navigate('/')
+                }
+                let playersToDisplay = doc.data() !== undefined 
+                ?  [...doc.data()?.gamePlayers, ...doc.data()?.gamePending] : []
+
                 let counter = 0;
                 playersToDisplay = playersToDisplay.map(
                     function (val: string, index : number) {
@@ -106,7 +121,7 @@ function Lobby() {
                                 <Request
                                     key={index}
                                     index={index}
-                                    colour={'#FFFFFF'}
+                                    colour={colours[index]}
                                     nickname={val}
                                     type={0} // 0 = joined player
                                     rejectPlayer={rejectPlayer}
@@ -131,7 +146,7 @@ function Lobby() {
                     }
                 )
                 setPending(playersToDisplay)
-            }
+            
         })
         return () => { unsub() }
     }, [])

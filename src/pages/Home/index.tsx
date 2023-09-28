@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react'
 import { useLobbyFinder, useName, useUrl, useRole } from '../../data/storage'
 import { db } from '../../data/firebase'
-import { doc, addDoc, collection, serverTimestamp, query, where, getDocs, updateDoc, onSnapshot, getDoc } from 'firebase/firestore'
+import { doc, addDoc, collection, serverTimestamp, query, where, getDocs, updateDoc, onSnapshot, getDoc, Unsubscribe } from 'firebase/firestore'
 import { useNavigate } from 'react-router-dom'
 
 import PinCode from '../../components/PinCode'
@@ -78,29 +78,27 @@ function Home() {
 
     useEffect(() => {
         if (listening) {
-            try {
-                const unsub = onSnapshot(doc(db, 'sessions', currentLobby), (doc) => {
-                    let updatedPlayers : string [] = doc.data()?.gamePlayers
-                    let updatedPending : string [] = doc.data()?.gamePending
-                    if (updatedPlayers.find(e => e === userName) && listening) {
-                        setJoining(true)
-                    } else if (listening) {
-                        console.log(listening)
-                        if (!updatedPending.find(e => e === userName) && auxListen) {
-                            setListening(false)
-                            setLoadingLobby(false)
-                            setDisplay(false)
-                            popupImage = 1
-                            popupText = 'Rifiutato dalla partita'
-                            setDisplay(true)
+            const unsub = onSnapshot(doc(db, 'sessions', currentLobby), (doc) => {
+                let updatedPlayers : string [] = doc.data()?.gamePlayers
+                let updatedPending : string [] = doc.data()?.gamePending
+                if (updatedPlayers.find(e => e === userName) && listening) {
+                    setJoining(true)
+                } else if (listening) {
+                    if (!updatedPending.find(e => e === userName) && auxListen) {
+                        setListening(false)
+                        setLoadingLobby(false)
+                        setDisplay(false)
+                        popupImage = 1
+                        popupText = 'Rifiutato dalla partita'
+                        setDisplay(true)
                         }
                     }
                 })
-            } catch (error) {
-                popupImage = 1
-                popupText = 'Si è verificato un errore durante la connessione al database'
-                setDisplay(true)
-            }
+            
+            popupImage = 1
+            popupText = 'Si è verificato un errore durante la connessione al database'
+            setDisplay(true)  
+            return () => { unsub() }      
         }
     }, [listening])
 
@@ -151,6 +149,17 @@ function Home() {
     
     async function handleCreation () {
         const currentUrl : string = roomUrl.join('')
+
+        const shuffleArray = (inputArray: number[]): number[] => {
+            const shuffledArray = [...inputArray];
+            for (let i = shuffledArray.length - 1; i > 0; i--) {
+                const randomIndex = Math.floor(Math.random() * (i + 1));
+                [shuffledArray[i], shuffledArray[randomIndex]] = [shuffledArray[randomIndex], shuffledArray[i]];
+            }
+            return shuffledArray;
+        };
+        const shuffledArray = shuffleArray([1, 2, 3, 4, 5])
+
         if (await credentialCheck(currentUrl, userName, 'CREATE')) { // username & url valid
             try {
                 const response = await addDoc(collection(db, 'sessions'), {
@@ -158,7 +167,11 @@ function Home() {
                     roomOwner: userName,
                     gameStarted: false,
                     gamePlayers: [userName],
-                    gamePending: []
+                    gamePending: [],
+                    gameIndexes: [...shuffledArray],
+                    [userName]: {
+                        playerID: shuffledArray[0]
+                    }     
                 })
                 updateRole(true)
                 updateLobby(response.id)

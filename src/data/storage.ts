@@ -21,7 +21,6 @@ interface roleStore {
     updateRole: (newRole: boolean) => void;
 }
 
-
 export const useName = create <nameStore> ((set, get) => ({
     userName: '',
     updateName: (newUserName: string) => set({userName: newUserName}),
