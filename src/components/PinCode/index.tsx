@@ -9,24 +9,22 @@ function PinCode({ enabled }: { enabled: boolean }) {
     function handleChange(event: React.ChangeEvent<HTMLInputElement>) {
         if (enabled) {
             let array: string[] = [...roomUrl]
-
             array[parseInt(event.target.id)] = (event.target.value.length > 1) ? event.target.value[1].toUpperCase() : event.target.value.toUpperCase()
             updateUrl(array)
-            
-            if (parseInt(event.target.id) !== 5)
+
+            if (parseInt(event.target.id) !== 5 && event.target.value.length)
                 document.getElementById((parseInt(event.target.id) + 1).toString())?.focus()
         }
     }
 
     function handleBackspace(event: React.KeyboardEvent<HTMLInputElement>) {
-        if (enabled) {
-            if (event.keyCode === 8) {
-                let array = [...roomUrl]
-                array[parseInt(event.currentTarget.id)] = ''
-                updateUrl(array)
-                if (event.currentTarget.id !== '0')
-                    document.getElementById((parseInt(event.currentTarget.id) - 1).toString())?.focus()
-            }
+        if (enabled && event.key === "Backspace") {
+            let array = [...roomUrl]
+            array[parseInt(event.currentTarget.id)] = ''
+            updateUrl(array)
+
+            if (event.currentTarget.id !== '0')
+                document.getElementById((parseInt(event.currentTarget.id) - 1).toString())?.focus()
         }
     }
 
