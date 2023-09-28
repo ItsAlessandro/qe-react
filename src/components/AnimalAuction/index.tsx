@@ -30,10 +30,10 @@ import Walrus from '../../images/Animals/Walrus.jpeg';
 
 import Three from '../../images/Levels/Three.svg';
 
-import CN from '../../images/Regions/CN.svg';
-import JP from '../../images/Regions/JP.png';
+import China from '../../images/Regions/China.svg';
+import Japan from '../../images/Regions/Japan.png';
 import USA from '../../images/Regions/USA.svg';
-import EU from '../../images/Regions/EU.svg';
+import Italy from '../../images/Regions/Italy.svg';
 import UK from '../../images/Regions/UK.png';
 
 function AnimalAuction() {
@@ -41,7 +41,7 @@ function AnimalAuction() {
     const levels = [Three];
     const regions = [CN];
 
-    const [i, setI] = useState(0);
+    const [ i, setI ] = useState(0);
 
     function handleClick() {
         setI(prevI => prevI + 1);

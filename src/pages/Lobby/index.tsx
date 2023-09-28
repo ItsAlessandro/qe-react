@@ -15,7 +15,7 @@ import './Lobby.css'
 let popupText: string = ""
 let popupImage: number = 0
 
-let removedLobby = false
+let removedLobby: boolean = false
 
 function Lobby() {
 
@@ -26,7 +26,6 @@ function Lobby() {
     const [ playersCount, setPlayersCount ] = useState(1)
     const [ displayPopUp, setDisplay ] = useState(false)
     const [ loadingGame, setLoadingGame ] = useState(false)
-
 
     const navigate = useNavigate()
 
@@ -77,13 +76,23 @@ function Lobby() {
             await updateDoc(doc(db, 'sessions', currentLobby), {
                 gameStarted: true
             })
-            navigate(`../game/${currentLobby}`)
+            navigate('../game/${currentLobby}')
         } else {
             popupImage = 1
             popupText = "Ci devono essere almeno 3 giocatori per iniziare la partita"
             setDisplay(true)
         }
     }
+
+    const closingTab = async () => {
+        handleExit(userName)
+    }
+    useEffect(() => {
+        window.addEventListener("beforeunload", closingTab)
+        return () => {
+            window.removeEventListener("beforeunload", closingTab)
+        }
+    }, [])
 
     useEffect(() => {
         const unsub = onSnapshot(doc(db, 'sessions', currentLobby), (doc) => {
@@ -130,7 +139,7 @@ function Lobby() {
     useEffect(() => {
         const unsub = onSnapshot(doc(db, 'sessions', currentLobby), (doc) => {
             if (doc.data()?.gameStarted) {
-                navigate(`../game/${currentLobby}`)
+                navigate('../game/${currentLobby}')
             } 
         })
         return () => { unsub() }

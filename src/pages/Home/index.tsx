@@ -19,7 +19,7 @@ function Home() {
     const navigate = useNavigate()
 
     const { roomUrl, updateUrl } = useUrl()
-    const { userName, updateName } = useName()
+    const { userName, updateName, getUserName } = useName()
     const { currentLobby, updateLobby } = useLobbyFinder()
     const { isOwner, updateRole } = useRole()
 
@@ -37,11 +37,32 @@ function Home() {
         })
     }
 
+    async function handleExit (name : string) {
+        const response = await getDoc(doc(db, 'sessions', currentLobby))
+        let currentPlayers : string[] = response.data()?.gamePlayers
+        currentPlayers.splice(currentPlayers.indexOf(name), 1)
+        await updateDoc(doc(db, 'sessions', currentLobby), {
+            gamePlayers: currentPlayers
+        })
+        navigate('/')
+    }
+
+
     if (!loadingLobby && listening) {
         auxListen = false
         setListening(false)
         removeName(userName)
     }
+
+    const closingTab = async () => {
+        removeName(getUserName())
+    }
+    useEffect(() => {
+        window.addEventListener("beforeunload", closingTab)
+        return () => {
+            window.removeEventListener("beforeunload", closingTab)
+        }
+    }, [])
 
     useEffect(() => { // joins to the latest update of currentLobby state
         if (joining) {
@@ -82,6 +103,7 @@ function Home() {
             }
         }
     }, [listening])
+
 
     async function credentialCheck (url : string, username : string, intent : string) {
         
@@ -161,27 +183,33 @@ function Home() {
                             let pendingArray = [...document.data().gamePending]
                             let joinedArray = [...document.data().gamePlayers]
                             if (pendingArray.find(e => e == userName) || joinedArray.find(e => e == userName)) {
-                                setDisplay(true)
                                 popupImage = 1
                                 popupText = "L'username è già stato preso da un altro giocatore"
+                                setDisplay(true)
                             } else {
-                                try {
-                                    pendingArray.push(userName)
-                                    await updateDoc(doc(db, 'sessions', document.id), {
-                                        gamePending: pendingArray
-                                    })
-                                    auxListen = true
-                                    setLoadingLobby(true)
-                                    popupImage = 2
-                                    popupText = "Aspettando che il proprietario della stanza accetti la tua richiesta"
-                                    setDisplay(true)
-                                    updateLobby(document.id)
-                                    setListening(true)
-                                    
-                                } catch (error) {
+                                if (joinedArray.length === 5) {
                                     popupImage = 1
-                                    popupText = "Si è verificato un errore durante l'aggiornamento del database"
+                                    popupText = "La lobby è piena"
                                     setDisplay(true)
+                                } else {
+                                    try {
+                                        pendingArray.push(userName)
+                                        await updateDoc(doc(db, 'sessions', document.id), {
+                                            gamePending: pendingArray
+                                        })
+                                        auxListen = true
+                                        setLoadingLobby(true)
+                                        popupImage = 2
+                                        popupText = "Aspettando che il proprietario della stanza accetti la tua richiesta"
+                                        setDisplay(true)
+                                        updateLobby(document.id)
+                                        setListening(true)
+                                        
+                                    } catch (error) {
+                                        popupImage = 1
+                                        popupText = "Si è verificato un errore durante l'aggiornamento del database"
+                                        setDisplay(true)
+                                    }
                                 }
                             }
                         } else {

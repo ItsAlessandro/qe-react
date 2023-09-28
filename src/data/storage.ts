@@ -2,7 +2,8 @@ import { create } from 'zustand'
 
 interface nameStore {
     userName: string
-    updateName: (newUserName: string) => void;
+    updateName: (newUserName: string) => void
+    getUserName: () => string
 }
 
 interface urlStore {
@@ -21,9 +22,10 @@ interface roleStore {
 }
 
 
-export const useName = create <nameStore> ((set) => ({
+export const useName = create <nameStore> ((set, get) => ({
     userName: '',
-    updateName: (newUserName: string) => set({userName: newUserName})
+    updateName: (newUserName: string) => set({userName: newUserName}),
+    getUserName: () => {return get().userName}
 }))
 
 export const useUrl = create <urlStore> ((set) => ({
