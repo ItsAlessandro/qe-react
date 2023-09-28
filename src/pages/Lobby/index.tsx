@@ -22,29 +22,29 @@ function Lobby() {
     const { userName, updateName } = useName()
     const { isOwner, updateRole } = useRole()
     const { currentLobby, updateLobby } = useLobbyFinder()
-    const [ pending, setPending ] = useState<string[]>([])
-    const [ playersCount, setPlayersCount ] = useState(1)
-    const [ displayPopUp, setDisplay ] = useState(false)
-    const [ loadingGame, setLoadingGame ] = useState(false)
+    const [pending, setPending] = useState<string[]>([])
+    const [playersCount, setPlayersCount] = useState(1)
+    const [displayPopUp, setDisplay] = useState(false)
+    const [loadingGame, setLoadingGame] = useState(false)
 
 
     const navigate = useNavigate()
 
-    async function getColours () {
+    async function getColours() {
         const response = await getDoc(doc(db, 'data', 'colours'))
-        setColours(response.data()?.colours)
+        //setColours(response.data()?.colours)
     }
 
     getColours() // SCOPPO, si può usare useMemo per getColours? (con lo useEffect otterrei il risultato troppo tardi, dopo il rerender)
 
-    async function handleRemoveLobby () {
+    async function handleRemoveLobby() {
         await deleteDoc(doc(db, 'sessions', currentLobby))
         navigate('/')
     }
 
-    async function handleExit (name : string) {
+    async function handleExit(name: string) {
         const response = await getDoc(doc(db, 'sessions', currentLobby))
-        let currentPlayers : string[] = response.data()?.gamePlayers
+        let currentPlayers: string[] = response.data()?.gamePlayers
         currentPlayers.splice(currentPlayers.indexOf(name), 1)
         await updateDoc(doc(db, 'sessions', currentLobby), {
             gamePlayers: currentPlayers,
@@ -53,9 +53,9 @@ function Lobby() {
         navigate('/')
     }
 
-    async function rejectPlayer (index : number) {
+    async function rejectPlayer(index: number) {
         const response = await getDoc(doc(db, 'sessions', currentLobby))
-        let currentArray : string[] = response.data()?.gamePending
+        let currentArray: string[] = response.data()?.gamePending
         currentArray.splice(index, 1)
 
         await updateDoc(doc(db, 'sessions', currentLobby), {
@@ -63,11 +63,11 @@ function Lobby() {
         })
     }
 
-    async function acceptPlayer (index : number) {
+    async function acceptPlayer(index: number) {
         const response = await getDoc(doc(db, 'sessions', currentLobby))
-        let currentPlayers : string[] = response.data()?.gamePlayers
-        let currentPending : string[] = response.data()?.gamePending
-        
+        let currentPlayers: string[] = response.data()?.gamePlayers
+        let currentPending: string[] = response.data()?.gamePending
+
         currentPlayers.push(currentPending.splice(index, 1)[0])
         setPlayersCount(oldCount => ++oldCount)
 
@@ -80,14 +80,14 @@ function Lobby() {
         })
     }
 
-    async function createGame () {
+    async function createGame() {
         const response = await getDoc(doc(db, 'sessions', currentLobby))
-        let currentPlayers : string[] = response.data()?.gamePlayers
+        let currentPlayers: string[] = response.data()?.gamePlayers
         if (currentPlayers.length > 2) {
             await updateDoc(doc(db, 'sessions', currentLobby), {
                 gameStarted: true
             })
-            navigate('../game/${currentLobby}')
+            navigate(`../game/${currentLobby}`)
         } else {
             popupImage = 1
             popupText = "Ci devono essere almeno 3 giocatori per iniziare la partita"
@@ -107,46 +107,46 @@ function Lobby() {
 
     useEffect(() => {
         const unsub = onSnapshot(doc(db, 'sessions', currentLobby), (doc) => {
-                if (doc.data() === undefined) { // session removed
-                    navigate('/')
-                }
-                let playersToDisplay = doc.data() !== undefined 
-                ?  [...doc.data()?.gamePlayers, ...doc.data()?.gamePending] : []
+            if (doc.data() === undefined) { // session removed
+                navigate('/')
+            }
+            let playersToDisplay = doc.data() !== undefined
+                ? [...doc.data()?.gamePlayers, ...doc.data()?.gamePending] : []
 
-                let counter = 0;
-                playersToDisplay = playersToDisplay.map(
-                    function (val: string, index : number) {
-                        if (index < doc.data()?.gamePlayers.length) {
-                            return (
-                                <Request
-                                    key={index}
-                                    index={index}
-                                    colour={colours[index]}
-                                    nickname={val}
-                                    type={0} // 0 = joined player
-                                    rejectPlayer={rejectPlayer}
-                                    acceptPlayer={acceptPlayer}
-                                />
-                            )
-                        } else if (isOwner) {
-                            return (
-                                <Request
-                                    key={index}
-                                    index={counter++}
-                                    colour={'#FFFFFF'}
-                                    nickname={val}
-                                    type={1} // 1 = pending player
-                                    rejectPlayer={rejectPlayer}
-                                    acceptPlayer={acceptPlayer}
-                                />
-                            )
+            let counter = 0;
+            playersToDisplay = playersToDisplay.map(
+                function (val: string, index: number) {
+                    if (index < doc.data()?.gamePlayers.length) {
+                        return (
+                            <Request
+                                key={index}
+                                index={index}
+                                colour={"red"}
+                                nickname={val}
+                                type={0} // 0 = joined player
+                                rejectPlayer={rejectPlayer}
+                                acceptPlayer={acceptPlayer}
+                            />
+                        )
+                    } else if (isOwner) {
+                        return (
+                            <Request
+                                key={index}
+                                index={counter++}
+                                colour={'#FFFFFF'}
+                                nickname={val}
+                                type={1} // 1 = pending player
+                                rejectPlayer={rejectPlayer}
+                                acceptPlayer={acceptPlayer}
+                            />
+                        )
 
-                        }
-                        
                     }
-                )
-                setPending(playersToDisplay)
-            
+
+                }
+            )
+            setPending(playersToDisplay)
+
         })
         return () => { unsub() }
     }, [])
@@ -154,8 +154,8 @@ function Lobby() {
     useEffect(() => {
         const unsub = onSnapshot(doc(db, 'sessions', currentLobby), (doc) => {
             if (doc.data()?.gameStarted) {
-                navigate('../game/${currentLobby}')
-            } 
+                navigate(`../game/${currentLobby}`)
+            }
         })
         return () => { unsub() }
     }, [])
@@ -163,55 +163,55 @@ function Lobby() {
     return (
         <div className='lobby home'>
             {
-                displayPopUp && 
-                <Popup 
-                    imageIndex={popupImage} 
-                    text={popupText} 
-                    display={displayPopUp} 
+                displayPopUp &&
+                <Popup
+                    imageIndex={popupImage}
+                    text={popupText}
+                    display={displayPopUp}
                     setDisplay={setDisplay}
                     isLoading={loadingGame}
                     setLoading={setLoadingGame}
                 />
             }
-                <div className='lobby-header home-header'></div>
+            <div className='lobby-header home-header'></div>
 
-                <div className='lobby-code home-options'>
-                    <PinCode enabled={false} />
-                </div>
+            <div className='lobby-code home-options'>
+                <PinCode enabled={false} />
+            </div>
 
-                <div className='lobby-body'>
+            <div className='lobby-body'>
                 <div className='lobby-container'>
-                {pending}
+                    {pending}
                 </div>
-                    {isOwner ? 
+                {isOwner ?
                     <div className='lobby-footer'>
-                        <button 
+                        <button
                             className='button'
-                            style={playersCount < 3 ? {backgroundColor: '#7BB8FF'} : {backgroundColor: '#0075FF'}}
+                            style={playersCount < 3 ? { backgroundColor: '#7BB8FF' } : { backgroundColor: '#0075FF' }}
                             onClick={() => createGame()}
                         >
                             Avvia
                         </button>
-                        <button 
-                            className='button button-home-icon' 
+                        <button
+                            className='button button-home-icon'
                             style={{ backgroundColor: 'black', width: '20%' }}
                             onClick={() => handleRemoveLobby()}
                         >
-                            <img src={home}></img> 
+                            <img src={home}></img>
                         </button>
                     </div>
                     :
                     <div className='lobby-footer'>
-                        <button 
-                            className='button button-home-icon' 
-                            style={{ backgroundColor: 'black'}}
+                        <button
+                            className='button button-home-icon'
+                            style={{ backgroundColor: 'black' }}
                             onClick={() => handleExit(userName)}
                         >
-                            <img src={home}></img> 
+                            <img src={home}></img>
                         </button>
                     </div>
                 }
-                </div>
+            </div>
         </div>
     )
 }
