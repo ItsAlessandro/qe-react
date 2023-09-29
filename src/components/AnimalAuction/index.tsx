@@ -39,7 +39,7 @@ import UK from '../../images/Regions/UK.png';
 function AnimalAuction() {
     const animals = [Axolotl, Bear, Blobfish, Capybara, Cat, Cheetah, Deer, Dugong, Elephant, Fox, Gazzelle, Giraffe, Jaguar, Jellyfish, Koala, Lion, Monkey, Moose, Owl, Parrot, PolarBear, ProboscisMonkey, Raindeer, RedHandfish, Walrus];
     const levels = [Three];
-    const regions = [CN];
+    const regions = [China];
 
     const [ i, setI ] = useState(0);
 

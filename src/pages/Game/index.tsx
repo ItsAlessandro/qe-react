@@ -42,7 +42,6 @@ function Game() {
             </div>
 
             <input className='input input-game' type='number'/>
-
             <button className='button button-game'>Conferma</button>
 
             <div className='players'>
@@ -66,6 +65,7 @@ function Game() {
                 <div id='points-view' className='points-view'>
                     <h2>Points</h2>
                 </div>
+                
             </div>
         </div >
     );

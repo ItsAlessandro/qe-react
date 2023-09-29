@@ -1,13 +1,17 @@
 import { create } from 'zustand'
 
 interface game {
-  numberOfPlayers: number
-  players: player[]
-  auctioneer: number
-  scoringTable: Map<number, Map<string, Map<number, number> | number>>
+    numberOfPlayers: number
+    players: player[]
+    auctioneer: number
+    scoringTable: Map<number, Map<string, Map<number, number> | number>>
+
+    updateNoP: (newNoP: number) => void
+    updatePlayers: (newPlayers: player[]) => void
+    updateAuctioneer: (newAuctioneer: number) => void
 }
 
-interface player {
+export interface player {
   username: string
   ID: number
   region: string
@@ -15,17 +19,32 @@ interface player {
   moneySpent: number
   isAuctioneer: boolean
   points: number
-  boughtAnimals: Animal[]
+  boughtAnimals: animal[]
   bids: number[]
+
+  updateUsername: (newUsername: string) => void,
+  updateID: (newID: number) => void,
+  updateRegion: (newRegion: string) => void,
+  updateColour: (newColour: string) => void,
+  updateMoneySpent: (newMS: number) => void,
+  updateIsAuctioneer: (newIA: boolean) => void,
+  updatePoints: (newPoints: number) => void,
+  updateBoughtAnimals: (newBA: animal[]) => void,
+  updateBids: (newBids: number[]) => void,
 
   calculateScore: (player: player, numberOfPlayers: number, scoringTable: Map<number, Map<string, Map<number, number> | number>>) => Map<string, number>
 }
 
-interface Animal {
+export interface animal {
   name: string
   region: string
   biome: string
   value: number
+
+  updateName: (newName: string) => void,
+  updateRegion: (newRegion: string) => void,
+  updateBiome: (newBiome: string) => void,
+  updateValue: (newValue: number) => void
 }
 
 export function setNumberValueForKeyOfSubkey<T extends number, V>(
@@ -97,19 +116,33 @@ export const useGame = create<game> ((set) => ({
   numberOfPlayers: 0,
   players: [],
   auctioneer: 0,
-  scoringTable: createScoringMap()
+  scoringTable: createScoringMap(),
+
+  updateNoP: (newNoP: number) => set({numberOfPlayers: newNoP}),
+  updatePlayers: (newPlayers: player[]) => set({players: newPlayers}),
+  updateAuctioneer: (newAuctioneer: number) => set({auctioneer: newAuctioneer})
 }))
 
 export const usePlayer = create <player> ((set) => ({
-  username: '',
-  ID: 0,
-  region: '',
-  colour: '',
-  moneySpent: 0,
-  isAuctioneer: false,
-  points: 0,
-  boughtAnimals: [],
-  bids: [],
+    username: '',
+    ID: 0,
+    region: '',
+    colour: '',
+    moneySpent: 0,
+    isAuctioneer: false,
+    points: 0,
+    boughtAnimals: [],
+    bids: [],
+
+  updateUsername: (newUserName: string) => set({username: newUserName}),
+  updateID: (newID: number) => set({ID: newID}),
+  updateRegion: (newRegion: string) => set({region: newRegion}),
+  updateColour: (newColour: string) => set({colour: newColour}),
+  updateMoneySpent: (newMS: number) => set({moneySpent: newMS}),
+  updateIsAuctioneer: (newIA: boolean) => set({isAuctioneer: newIA}),
+  updatePoints: (newPoints: number) => set({points: newPoints}),
+  updateBoughtAnimals: (newBA: animal[]) => set({boughtAnimals: newBA}),
+  updateBids: (newBids: number[]) => set({bids: newBids}),
 
   calculateScore: (player: player, numberOfPlayers: number, scoringTable: Map<number, Map<string, Map<number, number> | number>>): Map<string, number> => {
     let pointsCategories = new Map<string, number>()
@@ -165,4 +198,16 @@ export const usePlayer = create <player> ((set) => ({
 
     return pointsCategories
   }
+}))
+
+export const useAnimal = create <animal> ((set) => ({
+  name: '',
+  region: '',
+  biome: '',
+  value: 0,
+
+  updateName: (newName: string) => set({name: newName}),
+  updateRegion: (newRegion: string) => set({region: newRegion}),
+  updateBiome: (newBiome: string) => set({biome: newBiome}),
+  updateValue: (newValue: number) => set({value: newValue})
 }))
