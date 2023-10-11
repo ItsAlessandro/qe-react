@@ -1,27 +1,42 @@
 .game-container {
     margin-left: auto;
     margin-right: auto;
-    position: relative;
     height: 100vh;
+    position: relative;
 }
 
 .animal {
-    padding-top: 10vh;
-    padding-bottom: 10vh;
+    padding-top: 8vh;
     display: flex;
     justify-content: center;
     align-items: center;
-    width: 80%;
     margin-left: auto;
     margin-right: auto;
 }
 
-.input-game {
-    display: block;
-    margin-bottom: 4vh;
+.auctioneer-bid {
     margin-right: auto;
     margin-left: auto;
+    display: block;
     width: 80%;
+    margin-top: 6vh;
+}
+
+
+.input-game-auctioneer {
+    margin-right: auto;
+    margin-left: auto;
+    display: block;
+    width: 80%;
+    margin-top: 4vh;
+}
+
+.input-game {
+    margin-right: auto;
+    margin-left: auto;
+    display: block;
+    width: 80%;
+    margin-top: 10vh;
 }
 
 .button-game {
@@ -29,6 +44,7 @@
     margin-right: auto;
     margin-left: auto;
     width: 80%;
+    margin-top: 4vh;
 }
 
 .players {
@@ -57,13 +73,87 @@
     display: flex;
     aspect-ratio: 1 / 1;
     font-size: 22px;
+    position: relative;
 }
 
 .points-view {
     display: none;
+    background-color: white;
+    overflow: auto;
+    max-height: 80vh;
 }
 
 .player-info {
     text-align: center;
+    width: 100%;
+}
+
+.triangle {
+    bottom: 0;
+    position: absolute;
+    display: none;
+    width: 20%;
+}
+
+.point-container {
+    margin-top: 2vh;
+    margin-bottom: 2vh;
+    display: flex;
+    width: 100%;
+    justify-content: space-between;
+    height: 7vh;
+}
+
+.point-image-container {
+    margin-left: 6vw;
+}
+
+.point-label {
+    font-weight: 700;
+    display: flex;
+    margin-right: 6vw;
+    justify-content: center;
+    align-items: center;
+}
+
+.point-amount-number {
+    font-size: 22px;
+}
+
+.points-label {
+    font-weight: 700;
+    font-size: 22px;
+    padding-top: 2vh;
+    padding-bottom: 2vh;
+    padding-left: 6vw;
+}
+
+.points-header {
+    justify-content: space-between;
+    display: flex;
+}
+
+.money-label {
+    justify-content: center;
+    align-items: center;
+    display: flex;
+    padding-right: 6vw;
+    font-size: 22px;
+    color: #0075FF;
+    font-weight: 700;
+}
+
+.smaller-font {
+    font-size: 14px;
+}
+
+.point-amount-image {
+    position: absolute;
+    top: 0;
+    left: 0;
+}
+
+.point-image {
+    position: relative;
     width: 100%;
 }
